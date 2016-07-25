@@ -12,7 +12,7 @@ function submitTodolist(request,response){
 	});
 	request.on('end',function(){
 		post = querystring.parse(post);
-		mysql.insert("desktop","todolist","content,done","?,?",[post.content,"0"],response);	
+		mysql.insertTodolist([post.content,"0"],response);	
 	});
 };
 function getTodolist(request,response){
