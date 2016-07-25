@@ -1,0 +1,26 @@
+{
+  "name": "xia",
+  "version": "1.0.0",
+  "description": "serverHoooo",
+  "main": "app.js",
+  "dependencies": {
+    "mysql": "^2.11.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SherHoooo/serverHoo.git"
+  },
+  "keywords": [
+    "sherhoooo"
+  ],
+  "author": "sherhoooo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SherHoooo/serverHoo/issues"
+  },
+  "homepage": "https://github.com/SherHoooo/serverHoo#readme"
+}
