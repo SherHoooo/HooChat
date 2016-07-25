@@ -86,7 +86,7 @@ function uploadLogo (request, response) {
 		var types = files.upload.name.split('.');
 		var timestamp = new Date().getTime();
 		var filename = fields.userid + "" + timestamp + "." +types[types.length - 1] + "";
-		fs.renameSync(files.upload.path, "/home/sherhoooo/serverHoo/Hoo/img/" + filename);
+		fs.renameSync(files.upload.path, "/home/ubuntu/HooChat/Hoo/img/" + filename);
 		mysql.uploadLogo(fields.userid, filename, response);
 	})
 }
