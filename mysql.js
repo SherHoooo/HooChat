@@ -16,6 +16,27 @@ function inArray (a, b) {
 }
 
 //数据库操作
+function insertTodolist(value, response) {
+	var Db = useDb("desktop");
+	Db.query("insert into todolist(content, done) value(?,?)", value, function (err, result) {
+		var result = null;
+		if(err) {
+			throw err;
+			result = {
+				errorCode : 0,
+				msg : "添加失败，请重新添加"
+			}
+		}
+		else {
+			result = {
+				errorCode : 1,
+				msg : '添加成功'
+			}
+		}
+		result = JSON.stringify(result);
+		sendRes(result,response);
+	})
+}
 function insert(value,response){
 	var useTest = useDb("user");
 	var tasks = {
@@ -523,6 +544,7 @@ function signUpMobile (post, response) {
 		sendRes(result, response);
 	})
 }
+exports.insertTodolist = insertTodolist;
 exports.insert = insert;
 exports.selectAll = selectAll;
 exports.update = update;
