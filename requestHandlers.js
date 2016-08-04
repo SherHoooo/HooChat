@@ -5,6 +5,24 @@ var fs = require("fs");
 var formidable = require("formidable");
 var mysql = require("./mysql");
 
+//验证身份
+function checkId (req, res) {
+	var cookies = {};
+	var cookie = req.headers.cookie;
+	var list = cookie.split(';');
+	for(var i = 0; i < list.length; i++) {
+		var pair = list[i].split('=');
+		cookies[pair[0].trim()] = pair[1];
+	}
+	if(!cookies.inline || cookies.inline == '0') {
+		res.writeHead(200);
+		res.end('请先注册或登陆');
+		return false;
+	} else {
+		return true;
+	} 
+}
+
 function submitTodolist(request,response){
 	var post = '';
 	request.on('data',function(chunk){
@@ -60,25 +78,29 @@ function logIn(request,response){
 }
 
 function addfriend (request,response) {
-	var post = '';
-	request.on('data', function (chunk) {
-		post += chunk;
-	});
-	request.on('end', function () {
-		post = querystring.parse(post);
-		mysql.selectfriend(post, response);
-	})
+	if(checkId(request, response)) {
+		var post = '';
+		request.on('data', function (chunk) {
+			post += chunk;
+		});
+		request.on('end', function () {
+			post = querystring.parse(post);
+			mysql.selectfriend(post, response);
+		})
+	}
 }
 
 function changeMsgStatus (request, response) {
-	var post = '';
-	request.on('data', function (chunk) {
-		post += chunk;
-	});
-	request.on('end', function () {
-		post = querystring.parse(post);
-		mysql.changeMsg(post, response);
-	})
+	if(checkId(request, response)) {
+		var post = '';
+		request.on('data', function (chunk) {
+			post += chunk;
+		});
+		request.on('end', function () {
+			post = querystring.parse(post);
+			mysql.changeMsg(post, response);
+		})
+	}
 }
 function uploadLogo (request, response) {
 	var form = new formidable.IncomingForm();
@@ -91,45 +113,53 @@ function uploadLogo (request, response) {
 	})
 }
 function changeTalkRead (request, response) {
-	var post = '';
-	request.on('data', function (chunk) {
-		post += chunk;
-	});
-	request.on('end', function () {
-		post = querystring.parse(post);
-		mysql.changeTalkRead(post, response);
-	})
+	if(checkId(request, response)) {
+		var post = '';
+		request.on('data', function (chunk) {
+			post += chunk;
+		});
+		request.on('end', function () {
+			post = querystring.parse(post);
+			mysql.changeTalkRead(post, response);
+		})
+	}
 }
 
 function searchTalk (request, response) {
-	var post = '';
-	request.on('data', function (chunk) {
-		post += chunk;
-	});
-	request.on('end', function () {
-		post = querystring.parse(post);
-		mysql.searchTalk(post, response);
-	})
+	if(checkId(request, response)) {
+		var post = '';
+		request.on('data', function (chunk) {
+			post += chunk;
+		});
+		request.on('end', function () {
+			post = querystring.parse(post);
+			mysql.searchTalk(post, response);
+		})
+	}
 }
 function signUpName(request, response) {
-	var post = '';
-	request.on('data', function (chunk) {
-		post += chunk;
-	});
-	request.on('end', function () {
-		post = querystring.parse(post);
-		mysql.signUpName(post, response);
-	})
+	if(checkId(request, response)) {
+		var post = '';
+		request.on('data', function (chunk) {
+			post += chunk;
+		});
+		request.on('end', function () {
+			post = querystring.parse(post);
+			mysql.signUpName(post, response);
+		})
+	}
 }
 function signUpMobile(request, response) {
-	var post = '';
-	request.on('data', function (chunk) {
-		post += chunk;
-	});
-	request.on('end', function () {
-		post = querystring.parse(post);
-		mysql.signUpMobile(post, response);
-	})
+	if(checkId(request, response)) {
+		var post = '';
+		request.on('data', function (chunk) {
+			post += chunk;
+		});
+		request.on('end', function () {
+			post = querystring.parse(post);
+			mysql.signUpMobile(post, response);
+		})
+	}
 }
 exports.submitTodolist = submitTodolist;
 exports.getTodolist = getTodolist;

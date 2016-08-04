@@ -14,6 +14,19 @@ function inArray (a, b) {
 	}
 	return result;
 }
+//cookie设置
+function serialize (name, val, opt) {
+	var pairs = [name + '=' + val];
+	opt = opt || {};
+	if(opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
+	if(opt.domain) pairs.push('Domain=' + opt.domian);
+	if(opt.path) pairs.push('Path=' + opt.path);
+	if(opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+	if(opt.httpOnly) pairs.push('httpOnly');
+	if(opt.secure) pairs.push('Secure');
+
+	return pairs.join(';');
+}
 
 //数据库操作
 function insertTodolist(value, response) {
@@ -76,23 +89,33 @@ function insert(value,response){
 			sendRes(result,response);
 		}
 		else {
-			useTest.query('insert into baseinfo(name,pwd,mobile) value(?,?,?)',value,function (err,results) {
-				if(err) {throw err}
-				else {
-					result = {
-						errorCode : 1, 
-						msg : '注册成功', 
-						userinfo : {
-							id : results.insertId,
-							userlogo : 'defaultUserlogo.png',
-							name : value[0],
-							email : value[2]
-						}
-					};
-					result = JSON.stringify(result);
-					sendRes(result,response);
-				}
-			})
+			var mobile = $("#signMobile").val();
+	        if(!mobileCheck.test(value.mobile)) {
+	            result = {errorCode : 2, msg : "手机号错误"};
+				result = JSON.stringify(result);
+				sendRes(result,response);
+	        }
+	        else {
+	        	useTest.query('insert into baseinfo(name,pwd,mobile) value(?,?,?)',value,function (err,results) {
+					if(err) {throw err}
+					else {
+						result = {
+							errorCode : 1, 
+							msg : '注册成功', 
+							userinfo : {
+								id : results.insertId,
+								userlogo : 'defaultUserlogo.png',
+								name : value[0],
+								email : value[2]
+							}
+						};
+						result = JSON.stringify(result);
+						//添加cookie身份验证
+						response.setHeader('Set-Cookie', serialize('inline', '1'));
+						sendRes(result,response);
+					}
+				})
+	        }
 			useTest.end();
 		}
 	});
@@ -363,6 +386,8 @@ function select(database,table,name,value,checkValue,response){
 			}
 		}
 		result = JSON.stringify(result);
+		//添加cookie身份验证
+		response.setHeader('Set-Cookie', serialize('inline', '1'));
 		sendRes(result, response);
 		useTest.end();
 	});

@@ -3,6 +3,20 @@ var path = require("path");
 var mime = require("./mime").types;
 var requestHandlers = require("./requestHandlers");
 
+//cookie设置
+function serialize (name, val, opt) {
+	var pairs = [name + '=' + val];
+	opt = opt || {};
+	if(opt.maxAge) pairs.push('Max-Age=' + opt.maxAge);
+	if(opt.domain) pairs.push('Domain=' + opt.domian);
+	if(opt.path) pairs.push('Path=' + opt.path);
+	if(opt.expires) pairs.push('Expires=' + opt.expires.toUTCString());
+	if(opt.httpOnly) pairs.push('httpOnly');
+	if(opt.secure) pairs.push('Secure');
+
+	return pairs.join(';');
+}
+
 function router(pathname,request,response){
 	if(pathname.substring(1,8)=="request"){
 		var realrequest = pathname.substring(9);
@@ -18,6 +32,7 @@ function router(pathname,request,response){
 	else{
 		if(pathname=="/"||pathname.substring(0,6)=="/index"){
 			pathname = "/index.html";
+			response.setHeader('Set-Cookie', serialize('inline', '0'));
 		}
 		var realPath = "Hoo"+pathname;
 		fs.exists(realPath,function(exists){
